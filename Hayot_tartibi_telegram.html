@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="uz"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hayot tartibi</title>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--tx:#1f2a24;--mut:#6b756e;--ac:#1f7a5a;--bd:#e3dfd5;--qt:#eef6f1;--bad:#b3402f;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121815;--card:#1b2420;--tx:#e8efe9;--mut:#9aa89f;--ac:#4fc194;--bd:#2c3832;--qt:#1d2b24;--bad:#e5806f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121815;--card:#1b2420;--tx:#e8efe9;--mut:#9aa89f;--ac:#4fc194;--bd:#2c3832;--qt:#1d2b24;--bad:#e5806f;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--card);z-index:10}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;display:flex;gap:4px;overflow-x:auto;background:var(--card);border-bottom:1px solid var(--bd);padding:6px}
+nav button{flex:1 0 auto;border:0;background:none;color:var(--mut);padding:6px 10px;border-radius:10px;font:inherit;font-size:13px}
+nav button.on{background:var(--qt);color:var(--ac);font-weight:600}
+nav span{display:block;font-size:20px}
+main{max-width:640px;margin:0 auto;padding:12px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
+h2{margin:0 0 8px;font-size:18px}h3{margin:0 0 6px;font-size:15px}
+.qt{background:var(--qt);border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:14px}
+.qt p{margin:4px 0}.qt small{color:var(--mut)}
+input{font:inherit;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);min-width:0}
+.r{display:flex;gap:6px;margin:6px 0;align-items:center}.r input{flex:1}
+.b{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:8px 12px;font:inherit;white-space:nowrap}
+.g{background:none;border:1px solid var(--bd);color:var(--mut);border-radius:8px;padding:6px 10px;font:inherit}
+.it{display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--bd)}
+.it:last-child{border:0}.it b{margin-left:auto}.it input[type=number]{width:80px;flex:none}
+.big{font-size:26px;font-weight:700}.bad{color:var(--bad)}.mut{color:var(--mut);font-size:14px}
+.ck{width:22px;height:22px;flex:none;accent-color:var(--ac)}
+.done{text-decoration:line-through;color:var(--mut)}
+select{font:inherit;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);min-width:0;flex:1}.bar{height:8px;border-radius:4px;background:var(--bd);overflow:hidden}.bar i{display:block;height:100%;background:var(--ac)}
+ol,ul{padding-left:20px;margin:6px 0}li{margin:4px 0}
+textarea{width:100%;height:90px;font:12px monospace;box-sizing:border-box;background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:8px}
+</style></head><body>
+<nav id="nav"></nav><main id="app"></main>
+<script>
+const $=s=>document.querySelector(s);
+let S=null;try{S=JSON.parse(localStorage.getItem('ht')||'null')}catch(e){}
+S=S||{d:[],i:[],x:[],sp:{q:40,z:40,s:5,j:5,r:10},p:{},pl:[],id:[]};
+const save=()=>{S._t=Date.now();try{localStorage.setItem('ht',JSON.stringify(S))}catch(e){}cloudPut()};
+let tab='b';
+const T=[['b','🏠','Bosh'],['q','💳','Qarz'],['m','💰','Pul'],['x','💸','Rasxod'],['i','🕌','Ibodat'],['r','🎯','Reja'],['g','💡','Gʻoya']];
+const ld=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const today=()=>ld(new Date());
+const sum=a=>a.reduce((s,x)=>s+(+x.a||0),0);
+const f=n=>Math.round(n).toLocaleString('en-US').replace(/,/g,' ');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const Q={
+b:["Albatta, qiyinchilik bilan birga yengillik bor. (Inshirah, 5–6)","Amallar niyatlarga bogʻliqdir. (Buxoriy, Muslim)","Bilingki, qalblar faqat Alloh zikri bilan taskin topadi. (Raʼd, 28)"],
+q:["Agar qarzdor qiyinchilikda boʻlsa, unga yengillik kelguncha muhlat bering. (Baqara, 280)","Kim odamlarning molini uzish niyatida olsa, Alloh unga uzishda yordam beradi. (Buxoriy)","Dua: «Allohim, meni qaygʻu va gʻamdan, qarz ostida qolishdan va odamlar qahridan Oʻzingga panoh soʻrayman.» (Abu Dovud)"],
+x:["Isrof qilmanglar, albatta, Alloh isrof qiluvchilarni sevmaydi. (Aʼrof, 31)","Albatta, isrofgarlar shaytonlarning birodarlaridir. (Isro, 27)"],
+m:["Kim Allohdan taqvo qilsa, Alloh unga chiqish yoʻlini qiladi va uni oʻylamagan joyidan rizqlantiradi. (Taloq, 2–3)","Qoʻlingni boʻyningga bogʻlab qoʻyma (baxillik), butunlay yozib ham yuborma (isrof). (Isro, 29)","Sadaqa moldan kamaytirmaydi. (Muslim)"],
+i:["Sabr va namoz bilan yordam soʻranglar. (Baqara, 153)","Amallarning Allohga eng suyukli kam boʻlsa ham doimiy boʻlganidir. (Buxoriy, Muslim)","Ahlingni namozga buyur va oʻzing ham unga sabr qil. Biz sendan rizq soʻramaymiz, Biz seni rizqlantiramiz. (Toha, 132)"],
+r:["Tuyangni bogʻla, soʻng tavakkul qil. (Termiziy)","Azm qilsang, Allohga tavakkul qil. (Oli Imron, 159)"],
+g:["Odamlarning eng yaxshisi — odamlarga eng foydali boʻlganidir. (Tabaroniy)","Kim ilm izlab yoʻlga chiqsa, Alloh unga jannat yoʻlini yengillashtiradi. (Muslim)"]};
+const quotes=k=>`<div class=qt>${Q[k].map(q=>`<p>📖 ${q}</p>`).join('')}<small>Maʼnolari tarjima; manbani ustoz/olimdan tekshirib oling.</small></div>`;
+const P=[['bm','Bomdod'],['pe','Peshin'],['as','Asr'],['sh','Shom'],['xu','Xufton'],['qu','Qurʼon tilovati'],['zk','Zikr va istigʻfor'],['sd','Sadaqa (kichigi ham)'],['ot','Ota-ona/oila bilan aloqa'],['mu','Kechqurun muhasaba']];
+const SP=[['q','Qarz uzish'],['z','Zaruriy xarajat (oila, oziq, uy)'],['s','Sadaqa/zakat/xayr'],['j','Jamgʻarma'],['r','Rivojlanish va ish']];
+const mon=()=>today().slice(0,7);
+const lk=()=>S.lk!==false;
+const XC=[['z','Zaruriy (oila, oziq, uy)'],['q','Qarz toʻlovi'],['s','Sadaqa/zakat'],['j','Jamgʻarma'],['r','Rivojlanish/ish'],['o','Boshqa (qoidadan tashqari)']];
+const cur=a=>a.filter(x=>(x.t||'').startsWith(mon()));
+function streak(){let n=0,d=new Date();for(let k=0;k<400;k++){const key=ld(d),p=S.p[key]||{};if(P.slice(0,5).every(x=>p[x[0]]))n++;else if(key!==today())break;d.setDate(d.getDate()-1)}return n}
+function go(){
+$('#nav').innerHTML=T.map(t=>`<button class="${t[0]==tab?'on':''}" onclick="tab='${t[0]}';go();scrollTo(0,0)"><span>${t[1]}</span>${t[2]}</button>`).join('');
+$('#app').innerHTML=({b:B,q:Qa,m:M,x:X,i:I,r:()=>L('pl','Rejalar','Yangi reja...')+weekBlock(),g:()=>L('id','Gʻoyalar','Yangi gʻoya...'),h:H})[tab]();
+if(tab=='q')calc()}
+function B(){const p=S.p[today()]||{},n=P.filter(x=>p[x[0]]).length,inc=sum(cur(S.i)),ex=sum(cur(S.x)),open=S.pl.filter(x=>!x.k).slice(0,3),day=Math.floor(Date.now()/864e5),all=[].concat(Q.b,Q.q,Q.m,Q.i,Q.r,Q.g);
+return`<div class=qt><p>📖 ${all[day%all.length]}</p></div>
+<div class=c><h3>Bugun ibodat</h3><div class=big>${n}/${P.length}</div><div class=mut>Ketma-ket kunlar (5 vaqt namoz): ${streak()} 🔥</div></div>
+<div class=c><h3>📌 Pul qoidasi</h3><div class=mut>${SP.map(([k,l])=>S.sp[k]+'% '+l.split(' (')[0]).join(' · ')}</div></div><div class=c><h3>Qolgan qarz</h3><div class="big bad">${f(sum(S.d))} $</div></div>
+<div class=c><h3>Shu oy</h3><div class=mut>Daromad ${f(inc)} · Xarajat ${f(ex)}</div><div class=big>${f(inc-ex)}</div></div>
+<div class=c><h3>Bugungi asosiy ishlar</h3>${open.length?open.map(x=>`<div class=it>🎯 ${esc(x.t)}</div>`).join(''):'<div class=mut>Rejalar boʻlimiga ish qoʻshing.</div>'}</div>
+<div class=c><h3>Zaxira nusxa</h3><div class=r><button class=g onclick="$('#bk').value=JSON.stringify({...S,pin:''})">Koʻrsatish</button><button class=g onclick="imp()">Tiklash</button></div><textarea id=bk placeholder="Zaxira matnini shu yerga qoʻying"></textarea><div class=mut>Matnni nusxalab Notes'ga saqlang. Ma'lumot faqat shu brauzerda turadi.</div></div>`}
+function imp(){try{const pin=S.pin;S=JSON.parse($('#bk').value);S.pin=pin;fix();save();go()}catch(e){alert('Matn notoʻgʻri')}}
+function Qa(){const t=sum(S.d);return quotes('q')+`<div class=c><h2>Qarzlar</h2><div class="big bad">${f(t)} $</div>
+${S.d.map((d,i)=>`<div class=it><span>${esc(d.n)}${d.u?`<br><small class=mut>muddat: ${d.u}</small>`:''}</span><b>${f(d.a)} $</b><input id=p${i} type=number placeholder="toʻlov"><button class=b onclick="pay(${i})">✓</button><button class=g onclick="del('d',${i})">✕</button></div>`).join('')}
+<div class=r><input id=dn placeholder="Kimga / nima uchun"><input id=da type=number placeholder="Summa $" style="max-width:110px"></div><div class=r><input id=du type=date><button class=b onclick="addD()">+</button></div></div>
+<div class=c><h3>Qachon uzaman?</h3><div class=r><input id=cp type=number placeholder="Oyiga qancha toʻlay olasiz, $" oninput="calc()"></div><div id=co class=mut></div></div>
+<div class=c><h2>Tez uzish strategiyasi</h2><ol>
+<li><b>Hammasini yozing:</b> kimga, qancha, muddat, foiz bormi.</li>
+<li><b>Foizli qarz (ribo) birinchi</b> — u eng xavfli, avval shuni uzing.</li>
+<li><b>Muzokara:</b> har bir qarz egasi bilan ochiq gaplashing, oylik boʻlib toʻlash jadvalini kelishing. Muhlat soʻrash sunnatga zid emas.</li>
+<li><b>Qor yumaloq usuli:</b> eng kichik qarzni avval yoping, ruhingiz koʻtariladi, soʻng ketma-ket kattasiga oʻting.</li>
+<li><b>Daromadning 40% i qarzga</b> — oy boshida alohida ajratib qoʻying (Pul boʻlimi).</li>
+<li><b>Keraksiz narsani soting</b> va ortiqcha xarajatni 1–2 oyga toʻxtating.</li>
+<li><b>Qoʻshimcha daromad</b> butunlay qarzga ketsin (Pul boʻlimidagi gʻoyalar).</li>
+<li><b>Yangi qarz olmang.</b> Har oy oxirida qolgan qarzni shu yerda yangilang.</li></ol></div>`}
+function calc(){const p=+($('#cp')||{}).value,t=sum(S.d),o=$('#co');if(!o)return;o.textContent=p>0&&t>0?`Taxminan ${Math.ceil(t/p)} oy (${(t/p/12).toFixed(1)} yil)`:'Summani kiriting.'}
+function addD(){const n=$('#dn').value.trim(),a=+$('#da').value;if(!n||!(a>0))return;S.d.push({n,a,u:$('#du').value});save();go()}
+function pay(i){const v=+$('#p'+i).value;if(!(v>0))return;S.d[i].a=Math.max(0,S.d[i].a-v);if(!S.d[i].a)S.d.splice(i,1);save();go()}
+function del(k,i){S[k].splice(i,1);save();go()}
+function M(){const inc=sum(cur(S.i)),ex=sum(cur(S.x)),tot=Object.values(S.sp).reduce((a,b)=>a+(+b||0),0);
+const row=(k,l)=>cur(S[k]).map(x=>`<div class=it><span>${esc(x.n)}</span><b>${f(x.a)}</b><button class=g onclick="del('${k}',${S[k].indexOf(x)})">✕</button></div>`).join('');
+return quotes('m')+`<div class=c><h2>Daromad (shu oy): ${f(inc)}</h2>${row('i')}${bySrc()}<div class=r><input id=in list=src placeholder="Manba"><datalist id=src><option value="Rieltorlik"><option value="Taxi (Qoʻqon)"><option value="Taxi (shaharlararo)"><option value="Sayt yasash"></datalist><input id=ia type=number placeholder="Summa" style="max-width:110px"><button class=b onclick="addM('i')">+</button></div></div>
+
+<div class=c><h2>📌 Pul qoidasi</h2><div class=mut>Har tushgan daromad 100% shu qoida boʻyicha boʻlinadi (jami: <b class="${tot==100?'':'bad'}">${tot}%</b>). <button class=g onclick="S.lk=!lk();save();go()">${lk()?'🔒 Oʻzgartirish':'🔓 Qulflash'}</button></div>
+${SP.map(([k,l])=>`<div class=it><span>${l}</span><input type=number ${lk()?'disabled':''} value="${S.sp[k]}" onchange="S.sp['${k}']=+this.value;save();go()" style="width:64px"><b>${f(inc*(S.sp[k]||0)/100)}</b></div>`).join('')}
+<div class=mut style="margin-top:8px">Asoslar: halol daromad; oila nafaqasi farz; qarz uzish ustun; isrof va baxillikdan saqlanish; sadaqa; zakat nisobga yetsa (odatda 2,5%, olimdan soʻrab aniqlang). Foizlar tavsiya, fatvo emas.</div></div>
+<div class=c><h2>Daromad gʻoyalari</h2><ul><li>Rieltorlik: Instagram va Telegram orqali koʻproq mijoz, uy ijarasi vositachiligi</li><li>Qoʻqon ichida taxi: doimiy mijozlar, toʻy va tashkilot buyurtmalari</li><li>Shaharlararo taxi: oldindan buyurtma, yoʻlovchi toʻla boʻlib yurish</li><li>Sayt yasash xizmati: kichik biznesga mini-saytlar</li><li>Keraksiz buyumlarni sotish</li></ul></div>`}
+function bySrc(){const m={};cur(S.i).forEach(x=>{m[x.n]=(m[x.n]||0)+x.a});const e=Object.entries(m).sort((a,b)=>b[1]-a[1]);return e.length>1?`<div class=qt><small>Manbalar boʻyicha</small>${e.map(([n,v])=>`<p>${esc(n)}: <b>${f(v)}</b></p>`).join('')}</div>`:''}
+function addM(k){const n=$('#'+k+'n').value.trim(),a=+$('#'+k+'a').value;if(!n||!(a>0))return;S[k].push({n,a,t:today(),c:k=='x'?$('#xc').value:undefined});save();go()}
+function X(){const inc=sum(cur(S.i)),xs=cur(S.x),ex=sum(xs);
+return quotes('x')+`<div class=c><h2>Rasxodlar (shu oy)</h2><div class="big ${ex>inc?'bad':''}">${f(ex)}</div><div class=mut>Daromad: ${f(inc)} · Qoldi: ${f(inc-ex)}</div></div>
+<div class=c><h3>Qoida boʻyicha limitlar</h3>${XC.map(([k,l])=>{const sp=xs.filter(x=>(x.c||'o')==k).reduce((s,x)=>s+x.a,0),b=k=='o'?0:inc*(S.sp[k]||0)/100,pc=b?Math.min(100,sp/b*100):(sp?100:0);return`<div style="margin:8px 0"><div class=it style="border:0;padding:0"><span>${l}</span><b class="${sp>b?'bad':''}">${f(sp)} / ${f(b)}</b></div><div class=bar><i style="width:${pc}%;${sp>b?'background:var(--bad)':''}"></i></div></div>`}).join('')}</div>
+<div class=c><h3>Rasxod qoʻshish</h3><div class=r><select id=xc>${XC.map(([k,l])=>`<option value=${k}>${l}</option>`).join('')}</select></div><div class=r><input id=xn placeholder="Nimaga"><input id=xa type=number placeholder="Summa" style="max-width:110px"><button class=b onclick="addM('x')">+</button></div>
+${xs.slice().reverse().map(x=>`<div class=it><span>${esc(x.n)}<br><small class=mut>${(XC.find(c=>c[0]==(x.c||'o'))||[0,'Boshqa'])[1]} · ${x.t}</small></span><b>${f(x.a)}</b><button class=g onclick="del('x',${S.x.indexOf(x)})">✕</button></div>`).join('')}</div>`}
+function I(){const k=today(),p=S.p[k]||{};return quotes('i')+`<div class=c><h2>Bugungi amallar</h2><div class=mut>${k}</div>${P.map(([c,l],j)=>`<label class=it><input class=ck type=checkbox ${p[c]?'checked':''} onchange="tg('${c}')"><span class="${p[c]?'done':''}">${j<5?'<b>'+l+' (farz)</b>':l}</span></label>`).join('')}</div>`}
+function tg(c){const k=today();S.p[k]=S.p[k]||{};S.p[k][c]=!S.p[k][c];save();go()}
+function L(k,title,ph){const first=k=='pl'?quotes('r'):quotes('g');return first+`<div class=c><h2>${title}</h2>${S[k].map((x,i)=>`<div class=it><input class=ck type=checkbox ${x.k?'checked':''} onchange="S.${k}[${i}].k=!S.${k}[${i}].k;save();go()"><span class="${x.k?'done':''}">${esc(x.t)}</span><button class="g" style="margin-left:auto" onclick="del('${k}',${i})">✕</button></div>`).join('')||'<div class=mut>Hozircha boʻsh.</div>'}
+<div class=r><input id=li_${k} placeholder="${ph}"><button class=b onclick="addL('${k}')">+</button></div></div>`}
+function addL(k){const t=$('#li_'+k).value.trim();if(!t)return;S[k].push({t,k:false});save();go()}
+/* ---- yangi imkoniyatlar ---- */
+T.push(['h','📊','Hisobot']);
+function fix(){S.d=S.d||[];S.i=S.i||[];S.x=S.x||[];S.sp=S.sp||{q:40,z:40,s:5,j:5,r:10};S.p=S.p||{};S.pl=S.pl||[];S.id=S.id||[];S.o=S.o||[];S.rc=S.rc||[];S.g=S.g||[];S.h=S.h||[];S.w=S.w||{};S.hp=S.hp||{};S.pin=S.pin||''}
+fix();let UN=false;
+const nm=k=>{let[y,m]=k.split('-').map(Number);m++;if(m>12){m=1;y++}return y+'-'+String(m).padStart(2,'0')};
+const pd=n=>String(n).padStart(2,'0');
+const dl=u=>Math.round((new Date(u+'T00:00:00')-new Date(today()+'T00:00:00'))/864e5);
+const wk=()=>{const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7));return ld(d)};
+function recur(){let ch=false;const td=new Date().getDate();S.rc.forEach(r=>{for(let k=nm(r.last);k<=mon();k=nm(k)){if(k==mon()&&r.day>td)break;S.x.push({n:r.n,a:r.a,t:k+'-'+pd(r.day),c:r.c});r.last=k;ch=true}});if(ch)save()}
+/* Bosh: ogohlantirish */
+function warn(){const w=[];S.d.forEach(x=>{if(x.u&&dl(x.u)<=7)w.push([x.u,'Qarzingiz: '+x.n+' — '+f(x.a)+' $'])});S.o.forEach(x=>{if(x.u&&dl(x.u)<=7)w.push([x.u,'Sizga qaytarishi kerak: '+x.n+' — '+f(x.a)+' $'])});
+const sun=new Date().getDay()==0&&!S.w[wk()];
+return(w.length?`<div class=c style="border-color:var(--bad)"><h3 class=bad>⚠️ Muddat yaqin</h3>${w.sort().map(([u,t])=>{const d=dl(u);return`<div class=it><span>${esc(t)}<br><small class=mut>${u} · ${d<0?-d+' kun oʻtib ketgan':d==0?'bugun':d+' kun qoldi'}</small></span></div>`}).join('')}</div>`:'')+(sun?`<div class=qt><p>📝 Bugun yakshanba: haftalik muhasaba vaqti (Reja boʻlimi).</p></div>`:'')}
+const _B=B;B=()=>warn()+_B();
+/* Qarz: berilgan qarzlar */
+const _Qa=Qa;Qa=()=>_Qa()+owedBlock();
+function owedBlock(){return`<div class=c><h2>Sizga qaytariladigan qarzlar</h2><div class=big style="color:var(--ac)">${f(sum(S.o))} $</div>${S.o.map((d,i)=>`<div class=it><span>${esc(d.n)}${d.u?`<br><small class=mut>muddat: ${d.u}</small>`:''}</span><b>${f(d.a)} $</b><input id=op${i} type=number placeholder="qaytdi"><button class=b onclick="opay(${i})">✓</button><button class=g onclick="del('o',${i})">✕</button></div>`).join('')||'<div class=mut>Hozircha boʻsh.</div>'}<div class=r><input id=on placeholder="Kim / nima uchun"><input id=oa type=number placeholder="Summa $" style="max-width:100px"></div><div class=r><input id=ou type=date><button class=b onclick="addO()">+</button></div></div>`}
+function addO(){const n=$('#on').value.trim(),a=+$('#oa').value;if(!n||!(a>0))return;S.o.push({n,a,u:$('#ou').value});save();go()}
+function opay(i){const v=+$('#op'+i).value;if(!(v>0))return;S.o[i].a=Math.max(0,S.o[i].a-v);if(!S.o[i].a)S.o.splice(i,1);save();go()}
+/* Pul: jamgʻarma maqsadi */
+const _M=M;M=()=>_M()+goalBlock();
+function goalBlock(){return`<div class=c><h2>🎯 Jamgʻarma maqsadlari</h2>${S.g.map((g,i)=>{const p=Math.min(100,g.c/g.t*100);return`<div style="margin:10px 0"><div class=it style="border:0;padding:0"><span>${esc(g.n)}</span><b>${f(g.c)} / ${f(g.t)}</b><button class=g onclick="del('g',${i})">✕</button></div><div class=bar><i style="width:${p}%"></i></div><div class=r><input id=gp${i} type=number placeholder="qoʻshish"><button class=b onclick="gadd(${i})">+</button><span class=mut>${p.toFixed(0)}%</span></div></div>`}).join('')||'<div class=mut>Hozircha maqsad yoʻq.</div>'}<div class=r><input id=gn placeholder="Maqsad (masalan: moshina)"><input id=gt type=number placeholder="Summa" style="max-width:110px"><button class=b onclick="addG()">+</button></div></div>`}
+function addG(){const n=$('#gn').value.trim(),t=+$('#gt').value;if(!n||!(t>0))return;S.g.push({n,t,c:0});save();go()}
+function gadd(i){const v=+$('#gp'+i).value;if(!(v>0))return;S.g[i].c+=v;save();go()}
+/* Rasxod: takrorlanuvchi */
+const _X=X;X=()=>_X()+recBlock();
+function recBlock(){return`<div class=c><h2>🔁 Takrorlanuvchi xarajatlar</h2><div class=mut>Har oy belgilangan kuni oʻzi Rasxodga qoʻshiladi.</div>${S.rc.map((r,i)=>`<div class=it><span>${esc(r.n)}<br><small class=mut>har oyning ${r.day}-kuni · ${(XC.find(c=>c[0]==r.c)||[0,''])[1]}</small></span><b>${f(r.a)}</b><button class=g onclick="del('rc',${i})">✕</button></div>`).join('')}<div class=r><select id=rcc>${XC.map(([k,l])=>`<option value=${k}>${l}</option>`).join('')}</select></div><div class=r><input id=rn placeholder="Nima (internet, ijara...)"><input id=ra type=number placeholder="Summa" style="max-width:100px"><input id=rd type=number min=1 max=28 placeholder="Kun" style="max-width:64px"><button class=b onclick="addR()">+</button></div></div>`}
+function addR(){const n=$('#rn').value.trim(),a=+$('#ra').value,day=Math.min(28,Math.max(1,+$('#rd').value||1));if(!n||!(a>0))return;const d=new Date(),q=new Date(d.getFullYear(),d.getMonth()-1,1);S.rc.push({n,a,day,c:$('#rcc').value,last:q.getFullYear()+'-'+pd(q.getMonth()+1)});recur();save();go()}
+/* Ibodat: odatlar */
+const _I=I;I=()=>_I()+habBlock();
+function habBlock(){const p=S.hp[today()]||{};return`<div class=c><h2>Kundalik odatlar</h2>${S.h.map((h,i)=>`<label class=it><input class=ck type=checkbox ${p[h.id]?'checked':''} onchange="th(${h.id})"><span class="${p[h.id]?'done':''}">${esc(h.n)} <small class=mut>🔥${hs(h.id)}</small></span><button class=g style="margin-left:auto" onclick="del('h',${i})">✕</button></label>`).join('')||'<div class=mut>Odat qoʻshing: sport, kitob, erta turish...</div>'}<div class=r><input id=hn placeholder="Yangi odat"><button class=b onclick="addH()">+</button></div></div>`}
+function th(id){const k=today();S.hp[k]=S.hp[k]||{};S.hp[k][id]=!S.hp[k][id];save();go()}
+function hs(id){let n=0,d=new Date();for(let i=0;i<400;i++){const p=S.hp[ld(d)]||{};if(p[id])n++;else if(i>0)break;d.setDate(d.getDate()-1)}return n}
+function addH(){const n=$('#hn').value.trim();if(!n)return;S.h.push({id:Date.now(),n});save();go()}
+/* Reja: haftalik muhasaba */
+function weekBlock(){const k=wk(),w=S.w[k]||{},old=Object.keys(S.w).filter(x=>x!=k).sort().reverse().slice(0,4);
+return`<div class=c><h2>📝 Haftalik muhasaba</h2><div class=mut>Hafta boshi: ${k}</div>${[['a','Nima qildim?'],['b','Nima qilmadim?'],['c','Kelasi hafta nima qilaman?']].map(([x,l])=>`<h3 style="margin-top:10px">${l}</h3><textarea id=w${x} style="height:60px;font:inherit">${esc(w[x]||'')}</textarea>`).join('')}<div class=r><button class=b onclick="saveW()">Saqlash</button></div>${old.length?'<h3>Oldingi haftalar</h3>'+old.map(x=>`<div class=mut style="margin:6px 0"><b>${x}</b><br>✅ ${esc(S.w[x].a||'-')}<br>❌ ${esc(S.w[x].b||'-')}<br>➡️ ${esc(S.w[x].c||'-')}</div>`).join(''):''}</div>`}
+function saveW(){S.w[wk()]={a:$('#wa').value,b:$('#wb').value,c:$('#wc').value};save();go()}
+/* Hisobot */
+function H(){const m={};[['i',S.i],['x',S.x]].forEach(([k,a])=>a.forEach(x=>{const t=(x.t||'').slice(0,7);if(!t)return;m[t]=m[t]||{i:0,x:0};m[t][k]+=+x.a||0}));
+const ks=Object.keys(m).sort().slice(-6),mx=Math.max(1,...ks.map(k=>Math.max(m[k].i,m[k].x)));
+return`<div class=c><h2>📊 Oylik hisobot</h2>${ks.length?ks.slice().reverse().map((k,j,a)=>{const v=m[k],pv=m[a[j+1]],df=pv?v.i-pv.i:null;return`<div style="margin:12px 0"><div class=it style="border:0;padding:0"><b>${k}</b><span class=mut style="margin-left:auto">qoldi: <b class="${v.i-v.x<0?'bad':''}">${f(v.i-v.x)}</b></span></div><div class=r><span class=mut style="width:70px">Daromad</span><div class=bar style="flex:1"><i style="width:${v.i/mx*100}%"></i></div><span class=mut>${f(v.i)}</span></div><div class=r><span class=mut style="width:70px">Xarajat</span><div class=bar style="flex:1"><i style="width:${v.x/mx*100}%;background:var(--bad)"></i></div><span class=mut>${f(v.x)}</span></div>${df!==null?`<div class=mut>Oldingi oyga nisbatan daromad: ${df>=0?'+':''}${f(df)}</div>`:''}</div>`}).join(''):'<div class=mut>Daromad va rasxod kiritilgach hisobot shu yerda chiqadi.</div>'}</div>`+tools()}
+function tools(){return`<div class=c><h2>💾 Zaxira nusxa</h2><div class=r><button class=b onclick="exp()">Faylga yuklab olish</button><label class=g>Fayldan tiklash<input type=file accept=".json,application/json" style="display:none" onchange="impF(this)"></label></div><div class=mut>Faylni Telegram "Saqlangan xabarlar" yoki Drive'ga saqlab qoʻying.</div></div><div class=c><h2>🔒 PIN kod</h2><div class=mut>${S.pin?'PIN oʻrnatilgan.':'Sayt ochilganda PIN soʻraydi.'} Bu oddiy himoya: telefonni boshqa odam koʻrib qolishidan saqlaydi. PINni unutsangiz, zaxira faylidan tiklash kerak boʻladi.</div><div class=r><input id=pn type=password inputmode=numeric placeholder="4–6 xonali PIN"><button class=b onclick="setPin()">Saqlash</button>${S.pin?'<button class=g onclick="S.pin=\'\';save();go()">Olib tashlash</button>':''}</div></div>`}
+function exp(){const{pin,...r}=S,a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(r)],{type:'application/json'}));a.download='hayot-tartibi-'+today()+'.json';a.click()}
+function impF(el){const fl=el.files[0];if(!fl)return;const r=new FileReader();r.onload=()=>{try{const pin=S.pin;S=JSON.parse(r.result);S.pin=pin;fix();save();go()}catch(e){alert('Fayl notoʻgʻri')}};r.readAsText(fl)}
+function setPin(){const v=$('#pn').value.trim();if(!/^\d{4,6}$/.test(v)){alert('4–6 ta raqam kiriting');return}S.pin=v;UN=true;save();go()}
+function boot(){recur();if(S.pin&&!UN){$('#nav').innerHTML='';$('#app').innerHTML=`<div class=c style="margin-top:20vh;text-align:center"><h2>🔒 Hayot tartibi</h2><div class=r><input id=pk type=password inputmode=numeric placeholder="PIN" style="text-align:center" onkeydown="if(event.key=='Enter')unlock()"><button class=b onclick="unlock()">Ochish</button></div></div>`;return}go()}
+function unlock(){if($('#pk').value===S.pin){UN=true;go()}else{$('#pk').value='';$('#pk').placeholder='Notoʻgʻri PIN'}}
+/* Telegram Mini App: Telegram bulutida saqlash */
+const TG=location.hash.includes('tgWebAppData');let cs=null,cn=0,ct=0;
+function cloudPut(){if(!cs)return;clearTimeout(ct);ct=setTimeout(()=>{const{pin,...r}=S,a=[...JSON.stringify(r)],n=Math.ceil(a.length/3000),o={hp_n:String(n)};for(let i=0;i<n;i++)o['hp_'+i]=a.slice(i*3000,(i+1)*3000).join('');cs.setItems(o,()=>{const old=[];for(let i=n;i<cn;i++)old.push('hp_'+i);cn=n;if(old.length)cs.removeItems(old,()=>{})})},800)}
+function cloudLoad(){cs.getItem('hp_n',(e,v)=>{const n=+v;if(e||!n){cloudPut();return}cn=n;const ks=[];for(let i=0;i<n;i++)ks.push('hp_'+i);cs.getItems(ks,(e2,m)=>{if(e2)return;try{const p=JSON.parse(ks.map(k=>m[k]).join(''));if((p._t||0)>(S._t||0)){const pin=S.pin;S=p;S.pin=pin;fix();try{localStorage.setItem('ht',JSON.stringify(S))}catch(x){}if(!(S.pin&&!UN))go()}else cloudPut()}catch(x){}})})}
+if(TG){const sc=document.createElement('script');sc.src='https://telegram.org/js/telegram-web-app.js';sc.onload=()=>{try{const w=Telegram.WebApp;w.ready();w.expand();if(w.CloudStorage){cs=w.CloudStorage;cloudLoad()}}catch(e){}};document.head.appendChild(sc)}
+boot();
+</script></body></html>
